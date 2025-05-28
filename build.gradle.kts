@@ -2,7 +2,7 @@ plugins {
     id("com.gradleup.shadow") version "8.3.5" // Import shadow API.
     java // Tell gradle this is a java project.
     eclipse // Import eclipse plugin for IDE integration.
-    kotlin("jvm") version "2.0.21" // Import kotlin jvm plugin for kotlin/java integration.
+    kotlin("jvm") version "2.1.21" // Import kotlin jvm plugin for kotlin/java integration.
 }
 
 java {
@@ -39,9 +39,9 @@ dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT") // Declare purpur API version to be packaged.
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
 
-    implementation(project(":libs:Utilities-OG"))
-    implementation(project(":libs:GxUI-OG"))
-    implementation(project(":libs:DiamondBank-OG"))
+    compileOnly(project(":libs:Utilities-OG"))
+    compileOnly(project(":libs:GxUI-OG"))
+    compileOnly(project(":libs:DiamondBank-OG"))
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible builds.
