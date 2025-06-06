@@ -41,7 +41,6 @@ repositories {
 dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT") // Declare purpur API version to be packaged.
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
-
     compileOnly(project(":libs:Utilities-OG"))
     compileOnly(project(":libs:GxUI-OG"))
     compileOnly(project(":libs:DiamondBank-OG"))
@@ -53,9 +52,9 @@ tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .ja
 }
 
 tasks.shadowJar {
-    archiveClassifier.set("") // Use empty string instead of null.
     exclude("io.github.miniplaceholders.*") // Exclude the MiniPlaceholders package from being shadowed.
-    minimize()
+    archiveClassifier.set("") // Use empty string instead of null.
+	minimize()
 }
 
 tasks.build {
