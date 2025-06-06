@@ -2,7 +2,7 @@
 
 Template-OG but kotlin (along with some other things). 
 
-Gradle Version: 8.8
+Gradle Version: 8.14.1
 
 Java Version: 17
 
