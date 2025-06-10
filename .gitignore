@@ -35,3 +35,6 @@ build/
 .project
 .classpath
 bin/
+
+# IntellIJ project files
+.idea
