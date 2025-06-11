@@ -1,14 +1,12 @@
 package plugin
 
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
-import net.trueog.diamondbankog.DiamondBankAPI.DiamondBankException.*
+import net.trueog.diamondbankog.DiamondBankException
 import net.trueog.diamondbankog.PostgreSQL.ShardType
 import net.trueog.utilitiesog.UtilitiesOG
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
-import java.util.concurrent.ExecutionException
 
 
 class Listeners : Listener {
@@ -18,17 +16,25 @@ class Listeners : Listener {
         // launch {} is needed in this case since getPlayerShards().await() calls a database which can be slow to run on the main thread
         // and .await() is a function for in coroutines in the first place
         KotlinTemplateOG.scope.launch {
-            val playerShards = try {
-                KotlinTemplateOG.diamondBankAPI.getPlayerShards(event.player.uniqueId, ShardType.ALL).await()
-            } catch (e: EconomyDisabledException) {
-                UtilitiesOG.trueogMessage(event.player, "<red>The economy is disabled.")
-                return@launch
-            } catch (e: TransactionsLockedException) {
-                UtilitiesOG.trueogMessage(event.player, "<red>Your transactions are locked.")
-                return@launch
-            } catch (e: OtherException) {
-                UtilitiesOG.trueogMessage(event.player, "<red>Something went wrong.")
-                return@launch
+            val playerShardsResult =
+                KotlinTemplateOG.diamondBankAPI.getPlayerShards(event.player.uniqueId, ShardType.ALL)
+            val playerShards = playerShardsResult.getOrElse { e ->
+                when (e) {
+                    DiamondBankException.EconomyDisabledException -> {
+                        UtilitiesOG.trueogMessage(event.player, "<red>The economy is disabled.")
+                        return@launch
+                    }
+
+                    DiamondBankException.TransactionsLockedException -> {
+                        UtilitiesOG.trueogMessage(event.player, "<red>Your transactions are locked.")
+                        return@launch
+                    }
+
+                    else -> {
+                        UtilitiesOG.trueogMessage(event.player, "<red>Something went wrong.")
+                        return@launch
+                    }
+                }
             }
 
             val shardsInBank = playerShards.shardsInBank
