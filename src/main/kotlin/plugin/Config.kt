@@ -11,41 +11,28 @@ object Config {
     private lateinit var file: File
 
     fun load() {
-
         file = File(KotlinTemplateOG.plugin.dataFolder, "config.yml")
-        if (! file.exists()) {
-			
+        if (!file.exists()) {
             KotlinTemplateOG.plugin.saveDefaultConfig()
-            
         }
-
         config = YamlConfiguration.loadConfiguration(file)
-
         this.save()
-        
+
     }
 
     private fun save() {
-		
         config.save(file)
-        
     }
 
     fun getTemplateBool(): Boolean {
-		
         return config.get("templateBool") as Boolean
-        
     }
 
     fun getTemplateDouble(): Double {
-		
         return config.get("templateDouble") as Double
-        
     }
 
     fun getTemplateInt(): Int {
-		
         return config.get("templateInt") as Int
-        
     }
 }

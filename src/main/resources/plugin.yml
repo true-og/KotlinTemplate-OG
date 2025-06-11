@@ -3,5 +3,5 @@ author: Sekalol15
 description: Kotlin plugin template for the OG Suite
 website: https://github.com/Sekalol15/KotlinTemplate-OG
 version: '${version}'
-api-version: '${apiVersion}' 
+api-version: '${apiVersion}'
 main: plugin.KotlinTemplateOG

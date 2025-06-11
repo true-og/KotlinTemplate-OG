@@ -44,6 +44,8 @@ dependencies {
     compileOnly(project(":libs:Utilities-OG"))
     compileOnly(project(":libs:GxUI-OG"))
     compileOnly(project(":libs:DiamondBank-OG"))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
