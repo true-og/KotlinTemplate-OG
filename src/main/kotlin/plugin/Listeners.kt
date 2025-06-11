@@ -14,6 +14,9 @@ import java.util.concurrent.ExecutionException
 class Listeners : Listener {
     @EventHandler
     fun onBlockBreak(event: BlockBreakEvent) {
+        // Make sure to never run any other Bukkit functions in launch {} (for example accessing players' inventories)
+        // launch {} is needed in this case since getPlayerShards().await() calls a database which can be slow to run on the main thread
+        // and .await() is a function for in coroutines in the first place
         KotlinTemplateOG.scope.launch {
             val playerShards = try {
                 KotlinTemplateOG.diamondBankAPI.getPlayerShards(event.player.uniqueId, ShardType.ALL).await()
