@@ -3,7 +3,7 @@
 package plugin
 
 import kotlinx.coroutines.*
-import net.trueog.diamondbankog.DiamondBankAPI
+import net.trueog.diamondbankog.DiamondBankAPIKotlin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -14,14 +14,14 @@ class KotlinTemplateOG : JavaPlugin() {
         val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
         lateinit var plugin: KotlinTemplateOG
-        lateinit var diamondBankAPI: DiamondBankAPI
+        lateinit var diamondBankAPI: DiamondBankAPIKotlin
     }
 
     override fun onEnable() {
         plugin = this
         Config.load()
 
-        val diamondBankAPIProvider = server.servicesManager.getRegistration(DiamondBankAPI::class.java)
+        val diamondBankAPIProvider = server.servicesManager.getRegistration(DiamondBankAPIKotlin::class.java)
         if (diamondBankAPIProvider == null) {
             this.logger.severe("DiamondBank-OG API is null")
             Bukkit.getPluginManager().disablePlugin(this)
