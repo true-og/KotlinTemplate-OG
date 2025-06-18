@@ -2,9 +2,9 @@
 // Author: Sekalol15
 package plugin
 
+import java.io.File
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
-import java.io.File
 
 object Config {
     private lateinit var config: FileConfiguration
@@ -17,7 +17,6 @@ object Config {
         }
         config = YamlConfiguration.loadConfiguration(file)
         this.save()
-
     }
 
     private fun save() {
