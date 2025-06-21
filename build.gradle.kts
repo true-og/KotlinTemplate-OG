@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.21" // Import kotlin jvm plugin for kotlin/java integration.
-    id("com.diffplug.spotless") version "7.0.4"
+    id("com.diffplug.spotless") version "7.0.4" // Import auto-formatter.
     id("com.gradleup.shadow") version "8.3.6" // Import shadow API.
     eclipse // Import eclipse plugin for IDE integration.
 }
@@ -36,11 +36,11 @@ repositories {
 dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT") // Declare purpur API version to be packaged.
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
-    compileOnly(project(":libs:Utilities-OG"))
-    compileOnly(project(":libs:GxUI-OG"))
-    compileOnly(project(":libs:DiamondBank-OG"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib") // Import Kotlin standard library.
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2") // Import Kotlin async library.
+    compileOnly(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
+    compileOnly(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
+    compileOnly(project(":libs:DiamondBank-OG")) // Import TrueOG Network DiamondBank-OG API.
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
