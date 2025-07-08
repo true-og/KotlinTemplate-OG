@@ -1,8 +1,8 @@
 # KotlinTemplate-OG
 
-Template-OG but kotlin (along with some other things). 
+Template-OG but with Kotlin examples.
 
-Gradle Version: 8.14.1
+Gradle Version: 8.14.2
 
 Java Version: 17
 
