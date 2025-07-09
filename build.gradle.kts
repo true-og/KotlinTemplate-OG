@@ -1,14 +1,22 @@
 plugins {
-    kotlin("jvm") version "2.1.21" // Import kotlin jvm plugin for kotlin/java integration.
+    id("java-library") // Import helper for source-based libraries.
+    kotlin("jvm") version
+        "2.1.21" // Import kotlin jvm plugin for kotlin/java integration (Required for DiamondBank-OG API)
     id("com.diffplug.spotless") version "7.0.4" // Import auto-formatter.
     id("com.gradleup.shadow") version "8.3.6" // Import shadow API.
     eclipse // Import eclipse plugin for IDE integration.
 }
 
 java {
-    // Declare java version.
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17 // Compile with JDK 17 compatibility.
+
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17)) // Use JDK 17.
+        vendor.set(JvmVendorSpec.GRAAL_VM) // Use GraalVM CE.
+    }
 }
+
+kotlin { jvmToolchain(17) }
 
 group = "net.trueog.kotlintemplate-og" // Declare bundle identifier.
 
@@ -18,19 +26,29 @@ val apiVersion = "1.19" // Declare minecraft server target version.
 
 tasks.named<ProcessResources>("processResources") {
     val props = mapOf("version" to version, "apiVersion" to apiVersion)
-
     inputs.properties(props) // Indicates to rerun if version changes.
-
     filesMatching("plugin.yml") { expand(props) }
-    from("LICENSE") { // Bundle license into .jars.
-        into("/")
-    }
+    from("LICENSE") { into("/") } // Bundle license into .jars.
 }
 
 repositories {
     mavenCentral()
+    mavenLocal()
     gradlePluginPortal()
     maven { url = uri("https://repo.purpurmc.org/snapshots") }
+    maven { url = uri("file://${System.getProperty("user.home")}/.m2/repository") }
+    val customMavenLocal = System.getProperty("SELF_MAVEN_LOCAL_REPO")
+    if (customMavenLocal != null) {
+        val mavenLocalDir = file(customMavenLocal)
+        if (mavenLocalDir.isDirectory) {
+            println("Using SELF_MAVEN_LOCAL_REPO at: $customMavenLocal")
+            maven { url = uri("file://${mavenLocalDir.absolutePath}") }
+        } else {
+            logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
+        }
+    } else {
+        logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
+    }
 }
 
 dependencies {
@@ -38,9 +56,11 @@ dependencies {
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
     implementation("org.jetbrains.kotlin:kotlin-stdlib") // Import Kotlin standard library.
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2") // Import Kotlin async library.
-    compileOnly(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
-    compileOnly(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
-    compileOnly(project(":libs:DiamondBank-OG")) // Import TrueOG Network DiamondBank-OG API.
+    compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
+    compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
+    compileOnlyApi(
+        "net.trueog.diamondbank-og:diamondbank-og:1.19-e869a95a1c"
+    ) // Import TrueOG Network DiamondBank-OG API.
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
@@ -68,15 +88,6 @@ tasks.withType<JavaCompile>().configureEach {
     options.isFork = true
 }
 
-kotlin { jvmToolchain(17) }
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.GRAAL_VM
-    }
-}
-
 spotless {
     kotlin { ktfmt().kotlinlangStyle().configure { it.setMaxWidth(120) } }
     kotlinGradle {
@@ -84,3 +95,13 @@ spotless {
         target("build.gradle.kts", "settings.gradle.kts")
     }
 }
+
+val publishDiamondBankToLocal by
+    tasks.registering(GradleBuild::class) {
+        dir = file("libs/DiamondBank-OG")
+        tasks = listOf("publishToMavenLocal")
+    }
+
+tasks.withType<JavaCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
