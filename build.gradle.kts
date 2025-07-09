@@ -33,22 +33,8 @@ tasks.named<ProcessResources>("processResources") {
 
 repositories {
     mavenCentral()
-    mavenLocal()
     gradlePluginPortal()
     maven { url = uri("https://repo.purpurmc.org/snapshots") }
-    maven { url = uri("file://${System.getProperty("user.home")}/.m2/repository") }
-    val customMavenLocal = System.getProperty("SELF_MAVEN_LOCAL_REPO")
-    if (customMavenLocal != null) {
-        val mavenLocalDir = file(customMavenLocal)
-        if (mavenLocalDir.isDirectory) {
-            println("Using SELF_MAVEN_LOCAL_REPO at: $customMavenLocal")
-            maven { url = uri("file://${mavenLocalDir.absolutePath}") }
-        } else {
-            logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
-        }
-    } else {
-        logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
-    }
 }
 
 dependencies {
@@ -58,9 +44,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2") // Import Kotlin async library.
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
-    compileOnlyApi(
-        "net.trueog.diamondbank-og:diamondbank-og:1.19-e869a95a1c"
-    ) // Import TrueOG Network DiamondBank-OG API.
+    compileOnlyApi(project(":libs:DiamondBank-OG")) // Import TrueOG Network DiamondBank-OG API.
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
@@ -95,13 +79,3 @@ spotless {
         target("build.gradle.kts", "settings.gradle.kts")
     }
 }
-
-val publishDiamondBankToLocal by
-    tasks.registering(GradleBuild::class) {
-        dir = file("libs/DiamondBank-OG")
-        tasks = listOf("publishToMavenLocal")
-    }
-
-tasks.withType<JavaCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
