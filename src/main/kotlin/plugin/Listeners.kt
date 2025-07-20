@@ -11,9 +11,8 @@ class Listeners : Listener {
     @EventHandler
     fun onBlockBreak(event: BlockBreakEvent) {
         // Make sure to never run any other Bukkit functions in launch {} (for example accessing players' inventories)
-        // launch {} is needed in this case since getPlayerShards().await() calls a database which can be slow to run on
+        // launch {} is needed in this case since getTotalShards() calls a database which can be too slow to run on
         // the main thread
-        // and .await() is a function for in coroutines in the first place
         KotlinTemplateOG.scope.launch {
             val totalShards =
                 KotlinTemplateOG.diamondBankAPI.getTotalShards(event.player.uniqueId).getOrElse { e ->
