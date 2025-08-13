@@ -83,13 +83,16 @@ tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .ja
 }
 
 /* ----------------------------- Shadow -------------------------------- */
+tasks.build {
+    dependsOn(tasks.spotlessApply)
+    dependsOn(tasks.shadowJar)
+}
+
 tasks.shadowJar {
     exclude("io.github.miniplaceholders.*") // Exclude the MiniPlaceholders package from being shadowed.
     archiveClassifier.set("") // Use empty string instead of null.
     minimize()
 }
-
-tasks.jar { archiveClassifier.set("part") } // Applies to root jarfile only.
 
 tasks.build { dependsOn(tasks.spotlessApply, tasks.shadowJar) } // Build depends on spotless and shadow.
 
