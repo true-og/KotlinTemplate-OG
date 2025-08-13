@@ -28,11 +28,11 @@ java {
 kotlin { jvmToolchain(17) }
 
 /* ----------------------------- Metadata ------------------------------ */
-group = "net.trueog.kotlintemplate-og"
+group = "net.trueog.kotlintemplate-og" // Declare bundle identifier.
 
-version = "1.0"
+version = "1.0" // Declare plugin version (will be in .jar).
 
-val apiVersion = "1.19"
+val apiVersion = "1.19" // Declare minecraft server target version.
 
 /* ----------------------------- Resources ----------------------------- */
 tasks.named<ProcessResources>("processResources") {
