@@ -76,8 +76,6 @@ dependencies {
     } // Import TrueOG network DiamondBank-OG Kotlin API (from source).
 }
 
-apply(from = "eclipse.gradle.kts")
-
 /* ---------------------- Reproducible jars ---------------------------- */
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
     isPreserveFileTimestamps = false
@@ -99,7 +97,6 @@ tasks.build { dependsOn(tasks.spotlessApply, tasks.shadowJar) } // Build depends
 tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.add("-Xlint:deprecation") // Trigger deprecation warning messages.
     options.encoding = "UTF-8" // Use UTF-8 file encoding.
-    options.isFork = true
 }
 
 /* ----------------------------- Auto Formatting ------------------------ */
@@ -113,14 +110,4 @@ spotless {
 
 tasks.named("spotlessCheck") {
     dependsOn("spotlessApply") // Run spotless before checking if spotless ran.
-}
-
-/* ------------------------------ Eclipse SHIM ------------------------- */
-
-// This can't be put in eclipse.gradle.kts because Gradle is weird.
-subprojects {
-    apply(plugin = "java-library")
-    apply(plugin = "eclipse")
-    eclipse.project.name = "${project.name}-${rootProject.name}"
-    tasks.withType<Jar>().configureEach { archiveBaseName.set("${project.name}-${rootProject.name}") }
 }
