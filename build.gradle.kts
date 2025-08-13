@@ -111,10 +111,6 @@ spotless {
     }
 }
 
-tasks.named("compileJava") {
-    dependsOn("spotlessApply") // Run spotless before compiling with the JDK.
-}
-
 tasks.named("spotlessCheck") {
     dependsOn("spotlessApply") // Run spotless before checking if spotless ran.
 }
