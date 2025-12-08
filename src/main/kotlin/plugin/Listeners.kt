@@ -22,11 +22,6 @@ class Listeners : Listener {
                             return@launch
                         }
 
-                        is DiamondBankException.TransactionsLockedException -> {
-                            UtilitiesOG.trueogMessage(event.player, "<red>Transactions are currently locked for you.")
-                            return@launch
-                        }
-
                         is DiamondBankException.DatabaseException -> {
                             UtilitiesOG.trueogMessage(event.player, "<red>Something went wrong with the database.")
                             return@launch
