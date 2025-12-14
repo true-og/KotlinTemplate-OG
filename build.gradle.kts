@@ -11,7 +11,6 @@ plugins {
 }
 
 extra["kotlinAttribute"] = Attribute.of("kotlin-tag", Boolean::class.javaObjectType)
-
 val kotlinAttribute: Attribute<Boolean> by rootProject.extra
 
 /* --------------------------- JDK / Kotlin ---------------------------- */
