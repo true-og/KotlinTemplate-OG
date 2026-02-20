@@ -8,7 +8,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
-import net.trueog.diamondbankog.DiamondBankAPIKotlin
+import net.trueog.diamondbankog.api.DiamondBankAPIKotlin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -32,7 +32,7 @@ class KotlinTemplateOG : JavaPlugin() {
             Bukkit.getPluginManager().disablePlugin(this)
             return
         }
-        val diamondBankAPI = diamondBankAPIProvider.getProvider()
+        diamondBankAPI = diamondBankAPIProvider.provider
 
         this.server.pluginManager.registerEvents(Listeners(), this)
     }
