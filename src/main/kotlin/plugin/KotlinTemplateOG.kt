@@ -28,11 +28,11 @@ class KotlinTemplateOG : JavaPlugin() {
 
         val diamondBankAPIProvider = server.servicesManager.getRegistration(DiamondBankAPIKotlin::class.java)
         if (diamondBankAPIProvider == null) {
-            this.logger.severe("DiamondBank-OG API is null")
+            logger.severe("DiamondBank-OG API is null")
             Bukkit.getPluginManager().disablePlugin(this)
             return
         }
-        diamondBankAPI = diamondBankAPIProvider.getProvider()
+        val diamondBankAPI = diamondBankAPIProvider.getProvider()
 
         this.server.pluginManager.registerEvents(Listeners(), this)
     }
