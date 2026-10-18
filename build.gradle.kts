@@ -65,9 +65,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2") // Import Kotlin async library.
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG Java API (from source).
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG Java API (from source).
-    compileOnlyApi(project(":libs:Chat-OG")) {
-        attributes { attribute(kotlinAttribute, true) }
-    } // Import TrueOG Network Chat-OG Kotlin API (from source).
+    compileOnlyApi(
+        files("libs/Chat-OG/Chat-OG.jar")
+    ) // Import Chat-OG API (vendored jar until the API lands in true-og/Chat-OG).
     compileOnlyApi(project(":libs:DiamondBank-OG")) {
         attributes { attribute(kotlinAttribute, true) }
     } // Import TrueOG network DiamondBank-OG Kotlin API (from source).
@@ -86,6 +86,9 @@ tasks.shadowJar {
     relocationPrefix = "${project.group}.shadow"
     archiveClassifier.set("") // Use empty string instead of null.
     minimize()
+    from("libs/Chat-OG/LICENSE") {
+        into("META-INF/licenses/libs/Chat-OG")
+    } // Bundle the vendored Chat-OG jar's license.
 }
 
 tasks.jar { archiveClassifier.set("part") } // Applies to root jarfile only.
