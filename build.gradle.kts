@@ -67,7 +67,7 @@ dependencies {
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG Java API (from source).
     compileOnlyApi(
         files("libs/Chat-OG/Chat-OG.jar")
-    ) // Import Chat-OG API (vendored jar until the API lands in true-og/Chat-OG).
+    ) // Import Chat-OG API (vendored jar until the API lands in trueog/Chat-OG).
     compileOnlyApi(project(":libs:DiamondBank-OG")) {
         attributes { attribute(kotlinAttribute, true) }
     } // Import TrueOG network DiamondBank-OG Kotlin API (from source).
